@@ -1,4 +1,4 @@
-﻿namespace Store.Infra.Data.Enumerators;
+﻿namespace Store.Infra.MongoDB.Enumerators;
 
 public enum StoreType
 {

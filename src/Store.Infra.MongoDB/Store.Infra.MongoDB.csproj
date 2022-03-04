@@ -11,8 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Store.Domain\Store.Domain.csproj" />
-      <ProjectReference Include="..\Store.Infra.Data\Store.Infra.Data.csproj" />
+      <ProjectReference Include="..\Store.Application\Store.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
     </ItemGroup>
 
 </Project>
