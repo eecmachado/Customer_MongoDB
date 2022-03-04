@@ -10,4 +10,9 @@
       <Compile Remove="Class1.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Store.Domain\Store.Domain.csproj" />
+      <ProjectReference Include="..\Store.Infra.Data\Store.Infra.Data.csproj" />
+    </ItemGroup>
+
 </Project>
