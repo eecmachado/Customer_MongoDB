@@ -9,7 +9,7 @@ public class StoreProfile: Profile
     public StoreProfile()
     {
         CreateMap<StoreDomain, StoreData>();
-            //.ForMember(x => x.Id, opt => opt.Ignore());
         CreateMap<StoreData, StoreDomain>();
+        
     }
 }

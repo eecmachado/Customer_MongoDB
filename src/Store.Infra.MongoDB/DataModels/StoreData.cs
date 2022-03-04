@@ -1,11 +1,13 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using Store.Infra.MongoDB.Enumerators;
 
 namespace Store.Infra.MongoDB.DataModels;
 
 public class StoreData
 {
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
 
     public string? Name { get; set; }
 
