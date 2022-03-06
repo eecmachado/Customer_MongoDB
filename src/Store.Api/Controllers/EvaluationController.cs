@@ -7,7 +7,7 @@ using Store.Domain.Repositories;
 namespace Store.Api.Controllers;
 
 [ApiController]
-[Route("store")]
+[Route("[controller]")]
 public class EvaluationController : ControllerBase
 {
     private readonly IEvaluationRespository _evaluationRespository;
