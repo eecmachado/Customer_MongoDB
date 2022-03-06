@@ -1,11 +1,8 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using MongoDB.Driver;
 using Store.Domain.DomainModel;
 using Store.Domain.Repositories;
 using Store.Infra.MongoDB.DataModels;
-using System.Linq;
-using MongoDB.Bson;
 
 namespace Store.Infra.MongoDB.Repositories;
 
