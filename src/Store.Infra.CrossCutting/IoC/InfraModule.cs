@@ -9,8 +9,7 @@ public class InfraModule : Module
     {
         builder
             .RegisterAssemblyTypes(typeof(Repository).Assembly)
-            .Where(w => w.BaseType is {IsGenericType: true} && 
-                        w.BaseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Repository)))
+            .Where(w => w.BaseType != null && w.BaseType.IsAssignableFrom(typeof(Repository)))
             .AsImplementedInterfaces().InstancePerLifetimeScope();
     }
 }

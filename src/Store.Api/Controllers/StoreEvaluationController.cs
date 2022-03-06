@@ -37,4 +37,14 @@ public class StoreEvaluationController : ControllerBase
         var result = await _storeEvaluationRepository.GetStoresEvaluation();
         return Ok(result);
     }
+    
+    [HttpGet("GetBestPlaces/{quantity}")]
+    [ProducesResponseType(typeof(IEnumerable<StoreEvaluationDomain>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> GetBestPlaces(int quantity)
+    {
+        var result = await _storeEvaluationRepository.GetBestEvaluatedPlace(quantity);
+        return Ok(result);
+    }
 }

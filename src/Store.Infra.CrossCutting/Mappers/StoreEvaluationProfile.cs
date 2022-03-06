@@ -11,5 +11,8 @@ public class StoreEvaluationProfile : Profile
         CreateMap<StoreData, StoreEvaluationDomain>()
             .ForPath(d => d.Store, opt => opt.MapFrom(src => src));
 
+        CreateMap<StoreEvaluationData, StoreEvaluationDomain>()
+            .ForPath(d => d.Store, opt => opt.MapFrom(src => src.Stores.FirstOrDefault()));
+
     }
 }

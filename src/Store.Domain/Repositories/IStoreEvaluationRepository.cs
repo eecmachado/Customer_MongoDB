@@ -7,4 +7,6 @@ public interface IStoreEvaluationRepository
     Task<StoreEvaluationDomain> GetStoreEvaluation(string storeId);
     
     Task<IEnumerable<StoreEvaluationDomain>> GetStoresEvaluation();
+
+    Task<IEnumerable<StoreEvaluationDomain>> GetBestEvaluatedPlace(int placeQuality);
 }
