@@ -7,19 +7,20 @@ using Store.Infra.MongoDB.DataModels;
 
 namespace Store.Infra.MongoDB.Repositories;
 
-public class StoreRespository : BaseRepository<StoreData>, IStoreRespository
+public class StoreRespository : Repository, IStoreRespository
 {
     private const string Entity = "store";
 
     public StoreRespository(IMongoDatabase database, IMapper mapper)
-        : base(database, mapper, Entity)
+        : base(database, mapper)
     {
     }
 
     public async Task<StoreDomain> Post(StoreDomain model)
     {
         var data = Mapper.Map<StoreData>(model);
-        await Collection.InsertOneAsync(data);
+        var collection = GetCollection<StoreData>(Entity);
+        await collection.InsertOneAsync(data);
         return Mapper.Map<StoreDomain>(data);
     }
 
@@ -27,7 +28,8 @@ public class StoreRespository : BaseRepository<StoreData>, IStoreRespository
     {
         var data = Mapper.Map<StoreData>(model);
         data.Id = id;
-        await Collection.ReplaceOneAsync(u => u.Id == id, data);
+        var collection = GetCollection<StoreData>(Entity);
+        await collection.ReplaceOneAsync(u => u.Id == id, data);
         return Mapper.Map<StoreDomain>(data);
     }
 
@@ -36,34 +38,38 @@ public class StoreRespository : BaseRepository<StoreData>, IStoreRespository
         var dataType = Mapper.Map<Enumerators.StoreType>(type);
 
         var atualizacao = Builders<StoreData>.Update.Set(c => c.Type, dataType);
-
-        await Collection.UpdateOneAsync(_ => _.Id == id, atualizacao);
+        var collection = GetCollection<StoreData>(Entity);
+        await collection.UpdateOneAsync(_ => _.Id == id, atualizacao);
 
         return await Get(id);
     }
 
     public async Task<bool> Delete(string id)
     {
-        var result = await Collection.DeleteOneAsync(_ => _.Id == id);
+        var collection = GetCollection<StoreData>(Entity);
+        var result = await collection.DeleteOneAsync(_ => _.Id == id);
         return result.IsAcknowledged;
     }
 
     public async Task<IEnumerable<StoreDomain>> Get()
     {
-        var datas = await Collection.Find(_ => true).ToListAsync();
+        var collection = GetCollection<StoreData>(Entity);
+        var datas = await collection.Find(_ => true).ToListAsync();
         return Mapper.Map<IEnumerable<StoreDomain>>(datas);
     }
 
     public async Task<StoreDomain> Get(string id)
     {
-        var data = await Collection.FindAsync(_ => _.Id == id);
+        var collection = GetCollection<StoreData>(Entity);
+        var data = await collection.FindAsync(_ => _.Id == id);
         return Mapper.Map<StoreDomain>(data.SingleOrDefault());
     }
 
     public async Task<IEnumerable<StoreDomain>> Get(StoreType type)
     {
+        var collection = GetCollection<StoreData>(Entity);
         var dataType = Mapper.Map<Enumerators.StoreType>(type);
-        var data = await Collection.Find(_ => _.Type == dataType).ToListAsync();
+        var data = await collection.Find(_ => _.Type == dataType).ToListAsync();
         return Mapper.Map<IEnumerable<StoreDomain>>(data);
     }
 }

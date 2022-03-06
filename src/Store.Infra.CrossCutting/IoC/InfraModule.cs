@@ -8,9 +8,9 @@ public class InfraModule : Module
     protected override void Load(ContainerBuilder builder)
     {
         builder
-            .RegisterAssemblyTypes(typeof(BaseRepository<>).Assembly)
+            .RegisterAssemblyTypes(typeof(Repository).Assembly)
             .Where(w => w.BaseType is {IsGenericType: true} && 
-                        w.BaseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(BaseRepository<>)))
+                        w.BaseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Repository)))
             .AsImplementedInterfaces().InstancePerLifetimeScope();
     }
 }

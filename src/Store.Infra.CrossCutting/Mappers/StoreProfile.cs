@@ -10,6 +10,5 @@ public class StoreProfile: Profile
     {
         CreateMap<StoreDomain, StoreData>();
         CreateMap<StoreData, StoreDomain>();
-        
     }
 }
