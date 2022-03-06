@@ -55,10 +55,10 @@ public class StoreEvaluationRepository : Repository, IStoreEvaluationRepository
                 var evaluationsDatas = await _collectionEvaluation
                     .Find(_ => _.StoreId == storeData.Id)
                     .ToListAsync();
-                
+
                 storeEvaluationDomain.AvgStars = evaluationsDatas
                     .Average(a => a.Stars);
-                
+
                 storeEvaluationDomain.Evaluations = Mapper.Map<IEnumerable<EvaluationDomain>>(evaluationsDatas);
 
                 storesEvaluationDomain.Add(storeEvaluationDomain);
@@ -69,34 +69,32 @@ public class StoreEvaluationRepository : Repository, IStoreEvaluationRepository
 
     public async Task<IEnumerable<StoreEvaluationDomain>> GetBestEvaluatedPlace(int placeQuality)
     {
-        // bestPlaces Linq
+        //bestPlaces Linq
         var bestPlaces = _collectionEvaluation.AsQueryable()
             .GroupBy(k => k.StoreId)
-            .Select(s =>
-                new StoreEvaluationData
-                {
-                    Id = s.Key,
-                    AvgStars = s.Average(a => a.Stars)
-                })
+            .Select(s => new
+            {
+                StoreId = s.Key,
+                AvgStars = s.Average(a => a.Stars)
+            })
             .OrderByDescending(o => o.AvgStars)
             .Take(placeQuality)
-            .GroupJoin(_collectionStore.AsQueryable(), p => p.Id, s => s.Id,
-                (p, stores) => new StoreEvaluationData
+            .GroupJoin(_collectionStore.AsQueryable(), p => p.StoreId, s => s.Id,
+                (group, stores) => new
                 {
-                    Id = p.Id,
-                    AvgStars = p.AvgStars,
-                    Stores = stores
+                    group,
+                    stores
                 })
-            .GroupJoin(_collectionEvaluation.AsQueryable(), x => x.Id, s => s.StoreId,
-                (x, evaluations) => new StoreEvaluationData
-                {
-                    Id = x.Id,
-                    AvgStars = x.AvgStars,
-                    Stores = x.Stores,
-                    Evaluations = evaluations
-                })
-            .ToList();
-        
+            .GroupJoin(_collectionEvaluation.AsQueryable(), store => store.group.StoreId, s => s.StoreId,
+                (store, evaluations) => new
+                    StoreEvaluationData
+                    {
+                        Id = store.group.StoreId,
+                        AvgStars = store.group.AvgStars,
+                        Stores = store.stores,
+                        Evaluations = evaluations
+                    }).ToList();
+
         var storesEvaluationDomain = bestPlaces
             .Select(s => Mapper.Map<StoreEvaluationDomain>(s)).ToList();
 
